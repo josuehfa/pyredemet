@@ -6,22 +6,22 @@ A API da REDEMET é um produto de interfaces de programação de aplicativos(API
 ## Produtos disponíveis
 Para a obtenção de cada produto há uma sintase própria de solicitação que pode ser conferida na lista abaixo:
 
-* Aeródromos
-* Aeródromos Status
-* Aeródromos Info
-* Produtos AMDAR
-* Produtos MODELO
-* Produtos RADAR
-* Produtos SATÉLITE
-* Produtos STSC
-* Mensagem Aviso de Aeródromo
-* Mensagem GAMET
-* Mensagem METAR
-* Mensagem Meteograma
-* Mensagem PILOT
-* Mensagem SIGMET
-* Mensagem TAF
-* Mensagem TEMP
+* Aeródromos (`get_aerodromos(pais)`)
+* Aeródromos Status (`get_aerodromos_status(pais)`)
+* Aeródromos Info (`get_aerodromos_info(localidade, metar, taf, datahora)`)
+* Produtos AMDAR (`get_produtos_amdar(data)`)
+* Produtos MODELO (`get_produtos_modelo(modelo, area, produto, nivel, anima, timeout)`)
+* Produtos RADAR (`get_produto_radar(tipo, area, data, anima, timeout)`)
+* Produtos SATÉLITE (`get_produto_satelite(api_key, tipo, data, anima)`)
+* Produtos STSC (`get_produto_stsc(api_key, data, anima)`)
+* Mensagem Aviso de Aeródromo (`get_mensagens_aviso(api_key, localidades, data_ini, data_fim, page_tam)`)
+* Mensagem GAMET (`get_mensagens_gamet(api_key, pais, data_ini, data_fim, page_tam)`)
+* Mensagem METAR (`get_mensagens_metar(api_key, localidades, data_ini, data_fim, page_tam)`)
+* Mensagem Meteograma (`get_mensagens_meteograma(api_key, localidade, data_hora)`)
+* Mensagem PILOT (`get_mensagens_pilot(api_key, estacao, data_ini, data_fim, page_tam)`)
+* Mensagem SIGMET (`get_mensagens_sigmet(api_key, pais, data_ini, data_fim, page_tam)`)
+* Mensagem TAF (`get_mensagens_taf(api_key, localidades, data_ini, data_fim, page_tam, fim_linha)`)
+* Mensagem TEMP (`get_mensagens_temp(api_key, estacao, data_ini, data_fim, page_tam)`)
 
 ## Mode de utilização:
 
