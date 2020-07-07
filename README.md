@@ -25,8 +25,8 @@ Para a obtenção de cada produto há uma sintase própria de solicitação que 
 
 ## Mode de utilização:
 
-> `import pyredemet`
-> 
-> `redemet = pyredemet(api="SUA_API_KEY")`
-> 
-> `response = redemet.get_aerodromos(pais=Brasil)`
+`import pyredemet`
+ 
+`redemet = pyredemet(api="SUA_API_KEY")`
+
+`response = redemet.get_aerodromos(pais=Brasil)`
