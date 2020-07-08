@@ -1,3 +1,16 @@
+#!/usr/bin/ebv python
+# coding=utf-8
+
+""" 
+
+Author = Josue H. F. Andrade        
+License = MIT
+Version = 1.0.1
+Email = josuehfa@gmail.com
+Status = Development
+
+"""
+
 import os
 import sys
 #import logging

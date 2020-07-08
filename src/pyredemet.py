@@ -1,8 +1,19 @@
 #!/usr/bin/ebv python
 # coding=utf-8
 
+""" 
+
+Author = Josue H. F. Andrade        
+License = MIT
+Version = 1.0.1
+Email = josuehfa@gmail.com
+Status = Development
+
+"""
+
 import json
 import requests
+
 
 class pyredemet:
     """[summary] A API da REDEMET é um produto de interfaces de programação de aplicativos(APIs), que proporciona acesso a vários produtos meteorológicos.

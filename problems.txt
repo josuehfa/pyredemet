@@ -1,4 +1,4 @@
-1) get_aerodromos: Falta uma barra na documentação
+1) get_aerodromos: Falta uma barra na documentação e message é vazia [''] 
 
 E: https://api-redemet.decea.gov.br/aerodromos?api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW&pais=Argentina
 C: https://api-redemet.decea.gov.br/aerodromos/?api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW&pais=Argentina
