@@ -254,7 +254,31 @@ class test_pyredemet(unittest.TestCase):
         # O valor máximo permitido para a animação é 15.	1	10
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/produtos/satelite/realcada?api_key=SUA_CHAVE_AQUI&data=2020032114
-        pass
+        
+        tipo = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_satelite(tipo=tipo)
+        tipo = 'ab'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_satelite(tipo=tipo)
+
+        tipo='realcada'
+
+        data = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_satelite(tipo=tipo,data=data)
+        data = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_satelite(tipo=tipo,data=data)
+
+        tipo='realcada'
+
+        anima = '123'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_satelite(tipo=tipo,anima=anima)
+        anima = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_satelite(tipo=tipo,anima=anima)
 
     def test_get_produto_stsc(self):
         # GET produtos/stsc
@@ -271,8 +295,21 @@ class test_pyredemet(unittest.TestCase):
         # O valor máximo permitido para a animação é 60.	1	10
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/produtos/satelite/stsc?api_key=SUA_CHAVE_AQUI&data=2020032114
-        pass
+        data = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_stsc(data=data)
+        data = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_stsc(data=data)
 
+        tipo='realcada'
+
+        anima = '123'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_stsc(anima=anima)
+        anima = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_produto_stsc(anima=anima)
 
 
     def test_get_mensagens_aviso(self):
@@ -292,7 +329,30 @@ class test_pyredemet(unittest.TestCase):
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/aviso/SBBG?api_key=SUA_CHAVE_AQUI&data_ini=2020030313&data_fim=2020030313
-        pass
+        
+        localidades = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_aviso(localidades=localidades)
+        
+        localidades = 'SBBR, SBCF'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_aviso(localidades=localidades)
+
+        localidades = 'SBBR,SBCF'
+
+        data_ini = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_aviso(localidades=localidades,data_ini=data_ini)
+        data_ini = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_aviso(localidades=localidades,data_ini=data_ini)
+
+        data_fim = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_aviso(localidades=localidades,data_fim=data_fim)
+        data_fim = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_aviso(localidades=localidades,data_fim=data_fim)
 
     def test_get_mensagens_gamet(self):
         # GET mensagens/gamet
@@ -309,7 +369,25 @@ class test_pyredemet(unittest.TestCase):
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/gamet/?api_key=SUA_CHAVE_AQUI&data_ini=202006120300&data_fim=202006120300
-        pass
+        pais = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_gamet(pais=pais)
+
+        pais = 'Brasil'
+
+        data_ini = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_gamet(pais=pais,data_ini=data_ini)
+        data_ini = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_gamet(pais=pais,data_ini=data_ini)
+
+        data_fim = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_gamet(pais=pais,data_fim=data_fim)
+        data_fim = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_gamet(pais=pais,data_fim=data_fim)
 
     def test_get_mensagens_metar(self):
         # GET mensagens/metar
@@ -328,7 +406,30 @@ class test_pyredemet(unittest.TestCase):
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/metar/SBGL,SBBR?api_key=SUA_CHAVE_AQUI&data_ini=2019010100&data_fim=2019010101
-        pass
+        localidades = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_metar(localidades=localidades)
+        
+        localidades = 'SBBR, SBCF'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_metar(localidades=localidades)
+
+        localidades = 'SBBR,SBCF'
+
+        data_ini = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_metar(localidades=localidades,data_ini=data_ini)
+        data_ini = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_metar(localidades=localidades,data_ini=data_ini)
+
+        data_ini = '2020050512'
+        data_fim = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_metar(localidades=localidades,data_ini=data_ini,data_fim=data_fim)
+        data_fim = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_metar(localidades=localidades,data_ini=data_ini,data_fim=data_fim)
 
     def test_get_mensagens_meteograma(self):
         # GET mensagens/meteograma
@@ -351,7 +452,24 @@ class test_pyredemet(unittest.TestCase):
         # horas	Não	Determina quantas horas passadas a partir de data_hora	96	72
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/meteograma/SBBR?api_key=SUA_CHAVE_AQUI&data_hora=2020042114
-        pass
+        
+        localidade = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_meteograma(localidade=localidade)
+        
+        localidade = 'SBBR, SBCF'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_meteograma(localidade=localidade)
+
+        localidade = 'SBBR'
+
+        data_hora = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_meteograma(localidade=localidade,data_hora=data_hora)
+        data_hora = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_meteograma(localidade=localidade,data_hora=data_hora)
+
 
     def test_get_mensagens_pilot(self):
         # GET mensagens/pilot
@@ -368,7 +486,21 @@ class test_pyredemet(unittest.TestCase):
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/pilot?api_key=SUA_CHAVE_AQUI&estacao=83378&data_ini=2020032912&data_fim=2020032912
-        pass
+        estacao = 83378
+        data_ini = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_pilot(estacao=estacao,data_ini=data_ini)
+        data_ini = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_pilot(estacao=estacao,data_ini=data_ini)
+
+        data_ini = '2020050512'
+        data_fim = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_pilot(estacao=estacao,data_ini=data_ini,data_fim=data_fim)
+        data_fim = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_pilot(estacao=estacao,data_ini=data_ini,data_fim=data_fim)
 
     def test_get_mensagens_sigmet(self):
         # GET mensagens/sigmet
@@ -385,7 +517,26 @@ class test_pyredemet(unittest.TestCase):
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/sigmet/?api_key=SUA_CHAVE_AQUI&data_ini=202003291200&data_fim=202003291200
-        pass
+        pais = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_sigmet(pais=pais)
+
+        pais = 'Brasil'
+
+        data_ini = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_sigmet(pais=pais,data_ini=data_ini)
+        data_ini = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_sigmet(pais=pais,data_ini=data_ini)
+
+        data_ini = '2020050512'
+        data_fim = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_sigmet(pais=pais,data_ini=data_ini,data_fim=data_fim)
+        data_fim = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_sigmet(pais=pais,data_ini=data_ini,data_fim=data_fim)
 
     def test_get_mensagens_taf(self):
         # GET mensagens/taf
@@ -409,7 +560,37 @@ class test_pyredemet(unittest.TestCase):
         # Não há	texto
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/taf/SBBR,SBGL?api_key=SUA_CHAVE_AQUI&data_ini=2020031005&data_fim=2020031005&fim_linha=texto
-        pass
+        localidades = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_taf(localidades=localidades)
+        
+        localidades = 'SBBR, SBCF'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_taf(localidades=localidades)
+
+        localidades = 'SBBR,SBCF'
+
+        data_ini = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_taf(localidades=localidades,data_ini=data_ini)
+        data_ini = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_taf(localidades=localidades,data_ini=data_ini)
+
+        data_ini = '2020050512'
+        data_fim = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_taf(localidades=localidades,data_ini=data_ini,data_fim=data_fim)
+        data_fim = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_taf(localidades=localidades,data_ini=data_ini,data_fim=data_fim)
+
+        fim_linha = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_taf(localidades=localidades,fim_linha=fim_linha)
+        fim_linha = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_taf(localidades=localidades,fim_linha=fim_linha)
 
     def test_get_mensagens_temp(self):
         # GET mensagens/temp
@@ -428,8 +609,19 @@ class test_pyredemet(unittest.TestCase):
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/temp?api_key=SUA_CHAVE_AQUI&estacao=83378&data_ini=2020030912&data_fim=2020030912
-        pass
+        estacao = 83378
+        data_ini = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_temp(estacao=estacao,data_ini=data_ini)
+        data_ini = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_temp(estacao=estacao,data_ini=data_ini)
+
+        data_ini = '2020050512'
+        data_fim = 123
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_temp(estacao=estacao,data_ini=data_ini,data_fim=data_fim)
+        data_fim = 'abc'
+        with self.assertRaises(TypeError):
+            result = self.redemet.get_mensagens_temp(estacao=estacao,data_ini=data_ini,data_fim=data_fim)
     
-if __name__ == '__main__':
-    api_key = 'NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW'
-    redemet = pyredemet(api_key)

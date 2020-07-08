@@ -1,0 +1,25 @@
+1) get_aerodromos: Falta uma barra na documentação
+
+E: https://api-redemet.decea.gov.br/aerodromos?api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW&pais=Argentina
+C: https://api-redemet.decea.gov.br/aerodromos/?api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW&pais=Argentina
+
+2) get_produto_amdar: Solicitação para dadas não esta funcionando e na documentação consta o data_ini que nao é utilizado
+
+E: https://api-redemet.decea.gov.br/produtos/amdar?data_ini=2020032415&data=2020032415&api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW
+C: https://api-redemet.decea.gov.br/produtos/amdar?data=2020032415&api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW
+
+
+3) get_produto_stsc: Na documentação pede para colocar o /satelite/
+
+E: https://api-redemet.decea.gov.br/produtos/satelite/stsc?api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW&data=2020032114
+C: https://api-redemet.decea.gov.br/produtos/stsc?api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW&data=2020032114
+
+4) get_mensagem_aviso: Quando solicita uma lista de localidades e uma dessas não possui dados, o resultado geral é nulo mesmo com as outras possuindo informações.
+
+E: https://api-redemet.decea.gov.br/mensagens/aviso/SBBR,SBPA,SBSM,SBCF?api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW&data_ini=2020070712&data_fim=2020070718&page_tam=10
+C: https://api-redemet.decea.gov.br/mensagens/aviso/SBBR,SBPA,SBSM,?api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW&data_ini=2020070712&data_fim=2020070718&page_tam=10
+
+5) get_mensagem_gamet: A documentação não indica o local de inserção do pais, adicionando o Brasil ao fim a resposta é a mesma que não adicionando, adicionando argentina ocorre um erro.
+
+E: https://api-redemet.decea.gov.br/mensagens/gamet/?api_key=SUA_CHAVE_AQUI&data_ini=202006120300&data_fim=202006120300
+https://api-redemet.decea.gov.br/mensagens/gamet/?api_key=NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW&data_ini=202006120300&data_fim=202006120300&pais=Brasil

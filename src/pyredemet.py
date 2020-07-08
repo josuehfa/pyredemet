@@ -355,7 +355,7 @@ class pyredemet:
             print('get_produto_radar [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
             return None 
 
-    def get_produto_satelite(self, api_key, tipo, data, anima):
+    def get_produto_satelite(self, tipo, data=None, anima=None, timeout=180):
         # GET produtos/satelite
         # API destina à retornar informações de imagens de satélite disponíveis na REDEMET.
 
@@ -372,9 +372,49 @@ class pyredemet:
         # O valor máximo permitido para a animação é 15.	1	10
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/produtos/satelite/realcada?api_key=SUA_CHAVE_AQUI&data=2020032114
-        pass
+        params = { 'api_key': self.api_key }
 
-    def get_produto_stsc(self, api_key, data, anima):
+        if isinstance(tipo, str):
+            if tipo in ('ir','realcada','vis'):
+                tipo_url = tipo
+            else:
+                raise TypeError("Error: O tipo informado não está disponivel")
+        else:
+            raise TypeError("Error: O tipo não é uma string")
+        
+        if data is not None:
+            if isinstance(data, str):
+                if len(data) == 10 :
+                    params.update({'data': data})
+                else:
+                    raise TypeError("Error: A data informada não está no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data não é uma string")
+
+        if anima is not None:
+            if anima <= 15:
+                params.update({'anima': anima})
+            else:
+                raise TypeError("Error: O anima informado é maior que 11")
+        
+        try:
+            url = self.server_url + "/produtos/satelite/" + tipo_url
+            response = requests.get(url, params=params, timeout=timeout)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_produto_satelite [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_produto_satelite [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_produto_satelite [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
+
+    def get_produto_stsc(self, data=None, anima=None, timeout=180):
         # GET produtos/stsc
         # API destina à retornar mensagens as informação de ocorrência de trovoada.
 
@@ -389,9 +429,41 @@ class pyredemet:
         # O valor máximo permitido para a animação é 60.	1	10
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/produtos/satelite/stsc?api_key=SUA_CHAVE_AQUI&data=2020032114
-        pass
+        params = { 'api_key': self.api_key }
 
-    def get_mensagens_aviso(self, api_key, localidades, data_ini, data_fim, page_tam):
+        if data is not None:
+            if isinstance(data, str):
+                if len(data) == 10 :
+                    params.update({'data': data})
+                else:
+                    raise TypeError("Error: A data informada não está no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data não é uma string")
+
+        if anima is not None:
+            if anima <= 60:
+                params.update({'anima': anima})
+            else:
+                raise TypeError("Error: O anima informado é maior que 11")
+        
+        try:
+            url = self.server_url + "/produtos/stsc"
+            response = requests.get(url, params=params, timeout=timeout)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_produto_stsc [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_produto_stsc [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_produto_stsc [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
+
+    def get_mensagens_aviso(self, localidades, data_ini=None, data_fim=None, page_tam=None):
         # GET mensagens/aviso
         # API destina à retornar mensagens Aviso de Aeródromo das localidades disponíveis no banco de dados da REDEMET.
         # Há disponibilidade de mensagens desde 01/01/2003 até a presente data.
@@ -408,9 +480,57 @@ class pyredemet:
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/aviso/SBBG?api_key=SUA_CHAVE_AQUI&data_ini=2020030313&data_fim=2020030313
-        pass
+        params = { 'api_key': self.api_key }
 
-    def get_mensagens_gamet(self, api_key, pais, data_ini, data_fim, page_tam):
+        if isinstance(localidades, str):
+            check = len(localidades) - 4 # SBBR,SBCF ... [4],[4] -> 9 elementos: Possibilidades 4,9,14,18,24 (4)+(5)*(Numero adicional de localidades)
+            if check % 5 == 0:
+                localidades_url = localidades
+            else:
+                raise TypeError("Error: As localidades não estão no padrao correto [SBBR,SBCF,..]")
+        else:
+            raise TypeError("Error: A localidades não são uma string")
+
+        if data_ini is not None:
+            if isinstance(data_ini, str):
+                if len(data_ini) == 10 :
+                    params.update({'data_ini': data_ini})
+                else:
+                    raise TypeError("Error: A data_ini informada não está no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_ini não é uma string")
+        
+        if data_fim is not None:
+            if isinstance(data_fim, str):
+                if len(data_fim) == 10 :
+                    params.update({'data_fim': data_fim})
+                else:
+                    raise TypeError("Error: A data_fim informada não está no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_fim não é uma string")
+
+
+        if page_tam is not None:
+            params.update({'page_tam': page_tam})
+        
+        try:
+            url = self.server_url + "/mensagens/aviso/" + localidades_url
+            response = requests.get(url, params=params)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_mensagens_aviso [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_mensagens_aviso [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_mensagens_aviso [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
+
+    def get_mensagens_gamet(self, pais, data_ini=None, data_fim=None, page_tam=None):
         # GET mensagens/gamet
         # API destina à retornar mensagens GAMET dos países disponíveis no banco de dados da REDEMET.
 
@@ -425,9 +545,53 @@ class pyredemet:
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/gamet/?api_key=SUA_CHAVE_AQUI&data_ini=202006120300&data_fim=202006120300
-        pass
+        params = { 'api_key': self.api_key }
 
-    def get_mensagens_metar(self, api_key, localidades, data_ini, data_fim, page_tam):
+        if isinstance(pais, str):
+            params.update({'pais': pais})
+        else:
+            raise TypeError("Error: O pais não é uma string")
+
+        if data_ini is not None:
+            if isinstance(data_ini, str):
+                if len(data_ini) == 12 :
+                    params.update({'data_ini': data_ini})
+                else:
+                    raise TypeError("Error: A data_ini informada não está no formato correto (YYYYMMDDHHII) ")
+            else:
+                raise TypeError("Error: A data_ini não é uma string")
+        
+        if data_fim is not None:
+            if isinstance(data_fim, str):
+                if len(data_fim) == 12 :
+                    params.update({'data_fim': data_fim})
+                else:
+                    raise TypeError("Error: A data_fim informada não está no formato correto (YYYYMMDDHHII) ")
+            else:
+                raise TypeError("Error: A data_fim não é uma string")
+
+
+        if page_tam is not None:
+            params.update({'page_tam': page_tam})
+        
+        try:
+            url = self.server_url + "/mensagens/gamet" 
+            response = requests.get(url, params=params)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_mensagens_gamet [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_mensagens_gamet [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_mensagens_gamet [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
+
+    def get_mensagens_metar(self, localidades, data_ini=None, data_fim=None, page_tam=None):
         # GET mensagens/metar
         # API destina à retornar mensagens METAR das localidades disponíveis no banco de dados da REDEMET.
         # Há disponibilidade de mensagens desde 01/01/2003 até a presente data.
@@ -444,9 +608,57 @@ class pyredemet:
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/metar/SBGL,SBBR?api_key=SUA_CHAVE_AQUI&data_ini=2019010100&data_fim=2019010101
-        pass
+        params = { 'api_key': self.api_key }
 
-    def get_mensagens_meteograma(self, api_key, localidade, data_hora):
+        if isinstance(localidades, str):
+            check = len(localidades) - 4 # SBBR,SBCF ... [4],[4] -> 9 elementos: Possibilidades 4,9,14,18,24 (4)+(5)*(Numero adicional de localidades)
+            if check % 5 == 0:
+                localidades_url = localidades
+            else:
+                raise TypeError("Error: As localidades não estão no padrao correto [SBBR,SBCF,..]")
+        else:
+            raise TypeError("Error: A localidades não são uma string")
+
+        if data_ini is not None:
+            if isinstance(data_ini, str):
+                if len(data_ini) == 10 :
+                    params.update({'data_ini': data_ini})
+                else:
+                    raise TypeError("Error: A data_ini informada não está no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_ini não é uma string")
+        
+        if (data_fim is not None) and (data_ini is not None):
+            if isinstance(data_fim, str) and isinstance(data_ini, str):
+                if len(data_fim) == 10 and len(data_ini) == 10:
+                    params.update({'data_fim': data_fim})
+                else:
+                    raise TypeError("Error: A data_fim ou data ini informadas não estão no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_fim ou data ini não são strings")
+
+
+        if page_tam is not None:
+            params.update({'page_tam': page_tam})
+        
+        try:
+            url = self.server_url + "/mensagens/metar/" + localidades_url
+            response = requests.get(url, params=params)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_mensagens_metar [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_mensagens_metar [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_mensagens_metar [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
+
+    def get_mensagens_meteograma(self, localidade, data_hora=None, horas=None):
         # GET mensagens/meteograma
         # API destina à retornar informações de mensagens de METAR, TAF e Aviso de Aeródromo das localidades disponíveis no banco de dados da REDEMET.
 
@@ -467,9 +679,46 @@ class pyredemet:
         # horas	Não	Determina quantas horas passadas a partir de data_hora	96	72
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/meteograma/SBBR?api_key=SUA_CHAVE_AQUI&data_hora=2020042114
-        pass
+        params = { 'api_key': self.api_key }
 
-    def get_mensagens_pilot(self, api_key, estacao, data_ini, data_fim, page_tam):
+        if isinstance(localidade, str):
+            if len(localidade) == 4:
+                localidade_url = localidade
+            else:
+                raise TypeError("Error: A localidade não esta no padrao correto [SBBR,SBCF,..]")
+        else:
+            raise TypeError("Error: A localidade não é uma string")
+
+        if data_hora is not None:
+            if isinstance(data_hora, str):
+                if len(data_hora) == 10 :
+                    params.update({'data_hora': data_hora})
+                else:
+                    raise TypeError("Error: A data_hora informada não está no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_hora não é uma string")
+        
+        if horas is not None:
+            params.update({'horas': horas})
+            
+        try:
+            url = self.server_url + "/mensagens/meteograma/" + localidade_url
+            response = requests.get(url, params=params)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_mensagens_meteograma [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_mensagens_meteograma [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_mensagens_meteograma [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
+
+    def get_mensagens_pilot(self, estacao, data_ini=None, data_fim=None, page_tam=None):
         # GET mensagens/pilot
         # API destina à retornar mensagens PILOT das estações disponíveis no banco de dados da REDEMET.
 
@@ -484,9 +733,50 @@ class pyredemet:
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/pilot?api_key=SUA_CHAVE_AQUI&estacao=83378&data_ini=2020032912&data_fim=2020032912
-        pass
+        params = { 'api_key': self.api_key }
 
-    def get_mensagens_sigmet(self, api_key, pais, data_ini, data_fim, page_tam):
+        params.update({'estacao': estacao})
+
+        if data_ini is not None:
+            if isinstance(data_ini, str):
+                if len(data_ini) == 10 :
+                    params.update({'data_ini': data_ini})
+                else:
+                    raise TypeError("Error: A data_ini informada não está no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_ini não é uma string")
+        
+        if (data_fim is not None) and (data_ini is not None):
+            if isinstance(data_fim, str) and isinstance(data_ini, str):
+                if len(data_fim) == 10 and len(data_ini) == 10:
+                    params.update({'data_fim': data_fim})
+                else:
+                    raise TypeError("Error: A data_fim ou data ini informadas não estão no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_fim ou data ini não são strings")
+
+
+        if page_tam is not None:
+            params.update({'page_tam': page_tam})
+        
+        try:
+            url = self.server_url + "/mensagens/pilot"
+            response = requests.get(url, params=params)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_mensagens_pilot [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_mensagens_pilot [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_mensagens_pilot [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
+
+    def get_mensagens_sigmet(self, pais, data_ini=None, data_fim=None, page_tam=None):
         # GET mensagens/sigmet
         # API destina à retornar mensagens SIGMET dos países disponíveis no banco de dados da REDEMET.
 
@@ -501,9 +791,53 @@ class pyredemet:
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/sigmet/?api_key=SUA_CHAVE_AQUI&data_ini=202003291200&data_fim=202003291200
-        pass
+        params = { 'api_key': self.api_key }
 
-    def get_mensagens_taf(self, api_key, localidades, data_ini, data_fim, page_tam, fim_linha):
+        if isinstance(pais, str):
+            params.update({'pais': pais})
+        else:
+            raise TypeError("Error: O pais não é uma string")
+
+        if data_ini is not None:
+            if isinstance(data_ini, str):
+                if len(data_ini) == 12 :
+                    params.update({'data_ini': data_ini})
+                else:
+                    raise TypeError("Error: A data_ini informada não está no formato correto (YYYYMMDDHHII) ")
+            else:
+                raise TypeError("Error: A data_ini não é uma string")
+        
+        if (data_fim is not None) and (data_ini is not None):
+            if isinstance(data_fim, str) and isinstance(data_ini, str):
+                if len(data_fim) == 12 and len(data_ini) == 12:
+                    params.update({'data_fim': data_fim})
+                else:
+                    raise TypeError("Error: A data_fim ou data ini informadas não estão no formato correto (YYYYMMDDHHII) ")
+            else:
+                raise TypeError("Error: A data_fim ou data ini não são strings")
+
+
+        if page_tam is not None:
+            params.update({'page_tam': page_tam})
+        
+        try:
+            url = self.server_url + "/mensagens/sigmet" 
+            response = requests.get(url, params=params)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_mensagens_sigmet [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_mensagens_sigmet [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_mensagens_sigmet [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
+
+    def get_mensagens_taf(self, localidades, data_ini=None, data_fim=None, page_tam=None, fim_linha=None):
         # GET mensagens/taf
         # API destina à retornar mensagens TAF das localidades disponíveis no banco de dados da REDEMET.
         # Há disponibilidade de mensagens desde 01/01/2003 até a presente data.
@@ -525,9 +859,66 @@ class pyredemet:
         # Não há	texto
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/taf/SBBR,SBGL?api_key=SUA_CHAVE_AQUI&data_ini=2020031005&data_fim=2020031005&fim_linha=texto
-        pass
+        params = { 'api_key': self.api_key }
+
+        if isinstance(localidades, str):
+            check = len(localidades) - 4 # SBBR,SBCF ... [4],[4] -> 9 elementos: Possibilidades 4,9,14,18,24 (4)+(5)*(Numero adicional de localidades)
+            if check % 5 == 0:
+                localidades_url = localidades
+            else:
+                raise TypeError("Error: As localidades não estão no padrao correto [SBBR,SBCF,..]")
+        else:
+            raise TypeError("Error: A localidades não são uma string")
+
+        if data_ini is not None:
+            if isinstance(data_ini, str):
+                if len(data_ini) == 10 :
+                    params.update({'data_ini': data_ini})
+                else:
+                    raise TypeError("Error: A data_ini informada não está no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_ini não é uma string")
         
-    def get_mensagens_temp(self, api_key, estacao, data_ini, data_fim, page_tam):
+        if (data_fim is not None) and (data_ini is not None):
+            if isinstance(data_fim, str) and isinstance(data_ini, str):
+                if len(data_fim) == 10 and len(data_ini) == 10:
+                    params.update({'data_fim': data_fim})
+                else:
+                    raise TypeError("Error: A data_fim ou data ini informadas não estão no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_fim ou data ini não são strings")
+
+
+        if page_tam is not None:
+            params.update({'page_tam': page_tam})
+
+        if fim_linha is not None:
+            if isinstance(fim_linha, str):
+                if fim_linha in ['texto','html']:
+                    params.update({'fim_linha': fim_linha})
+                else:
+                    raise TypeError("Error: O fim_linha informadas não está no formato correto (text ou html) ")
+            else:
+                raise TypeError("Error: O fim_linha não é strings")
+        
+        try:
+            url = self.server_url + "/mensagens/taf/" + localidades_url
+            response = requests.get(url, params=params)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_mensagens_taf [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_mensagens_taf [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_mensagens_taf [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
+        
+    def get_mensagens_temp(self, estacao, data_ini=None, data_fim=None, page_tam=None):
         # GET mensagens/temp
         # API destina à retornar mensagens TEMP das estações disponíveis no banco de dados da REDEMET.
         # Há disponibilidade de mensagens desde 01/01/2003 até a presente data.
@@ -544,27 +935,69 @@ class pyredemet:
         # page_tam	Não	Número de registros por página	150	100
         # Exemplo de Solicitação
         # https://api-redemet.decea.gov.br/mensagens/temp?api_key=SUA_CHAVE_AQUI&estacao=83378&data_ini=2020030912&data_fim=2020030912
-        pass
+        params = { 'api_key': self.api_key }
+
+        params.update({'estacao': estacao})
+
+        if data_ini is not None:
+            if isinstance(data_ini, str):
+                if len(data_ini) == 10 :
+                    params.update({'data_ini': data_ini})
+                else:
+                    raise TypeError("Error: A data_ini informada não está no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_ini não é uma string")
+        
+        if (data_fim is not None) and (data_ini is not None):
+            if isinstance(data_fim, str) and isinstance(data_ini, str):
+                if len(data_fim) == 10 and len(data_ini) == 10:
+                    params.update({'data_fim': data_fim})
+                else:
+                    raise TypeError("Error: A data_fim ou data ini informadas não estão no formato correto (YYYYMMDDHH) ")
+            else:
+                raise TypeError("Error: A data_fim ou data ini não são strings")
+
+
+        if page_tam is not None:
+            params.update({'page_tam': page_tam})
+        
+        try:
+            url = self.server_url + "/mensagens/temp"
+            response = requests.get(url, params=params)
+        except Exception as ex:
+            raise RuntimeError("Error: " + repr(ex))
+
+        if response.status_code == 200:
+            response = response.json() 
+            if response['status'] == False:
+                print('get_mensagens_temp [!] HTTP status == False')
+            if response['message'] != '':
+                print('get_mensagens_temp [!] HTTP message == ' + str(response['message']))
+            return response['data']
+        else:
+            print('get_mensagens_temp [!] HTTP {0} calling [{1}]'.format(response.status_code, response.request.url))
+            return None 
 
 if __name__ == '__main__':
     api_key = 'NniTZlc8mk00BhImNU0WH4173jo3j62YAh4CwAeW'
     redemet = pyredemet(api_key)
-    # #Aerodromos
+    #Aerodromos
     result = redemet.get_aerodromos(pais='Brasil')
-    # result = redemet.get_aerodromos_status(pais='Brasil')
-    # result = redemet.get_aerodromos_info(localidade='SBBR', metar='sim', taf='sim')
-    ##Produtos
-    # result = redemet.get_produtos_amdar(data='2020032415')
-    # result = redemet.get_produtos_modelo(modelo='wifs',area='b1',produto='vento-altitude-barb',nivel='600',anima=2)
-    # result = redemet.get_produto_radar(tipo='maxcappi',area='tm',data='2020032410',anima=2)
-    # result = redemet.get_produto_satelite()
-    # result = redemet.get_produto_stsc()
-    # #Mensagens
-    # result = redemet.get_mensagens_aviso()
-    # result = redemet.get_mensagens_gamet()
-    # result = redemet.get_mensagens_metar()
-    # result = redemet.get_mensagens_meteograma()
-    # result = redemet.get_mensagens_pilot()
-    # result = redemet.get_mensagens_sigmet()
-    # result = redemet.get_mensagens_taf()
-    # result = redemet.get_mensagens_temp()
+    result = redemet.get_aerodromos_status(pais='Brasil')
+    result = redemet.get_aerodromos_info(localidade='SBBR', metar='sim', taf='sim')
+    #Produtos
+    result = redemet.get_produtos_amdar(data='2020032415')
+    result = redemet.get_produtos_modelo(modelo='wifs',area='b1',produto='vento-altitude-barb',nivel='600',anima=2)
+    result = redemet.get_produto_radar(tipo='maxcappi',area='tm',data='2020032410',anima=2)
+    result = redemet.get_produto_satelite(tipo='vis', data='2020032410', anima=2)
+    result = redemet.get_produto_stsc(data='2020032410', anima=2)
+    #Mensagens
+    result = redemet.get_mensagens_aviso(localidades='SBBR,SBPA', data_ini='2020030912', data_fim='2020030912')
+    result = redemet.get_mensagens_gamet(pais='Brasil', data_ini='202006120300',data_fim='202006120300')
+    result = redemet.get_mensagens_metar(localidades='SBBR,SBPA', data_ini='2020030912',data_fim='2020030912')
+    result = redemet.get_mensagens_meteograma(localidade='SBBR', data_hora='2020030912', horas=12)
+    result = redemet.get_mensagens_pilot(estacao=83378,data_ini='2020030912',data_fim='2020030912')
+    result = redemet.get_mensagens_sigmet(pais='Brasil', data_ini='202007071200',data_fim='202007071800')
+    result = redemet.get_mensagens_taf(localidades='SBBR,SBPA', data_ini='2020030912',data_fim='2020030912', page_tam=100, fim_linha='texto')
+    result = redemet.get_mensagens_temp(estacao=83378,data_ini='2020030912',data_fim='2020030912')
+    print ("Done!")
