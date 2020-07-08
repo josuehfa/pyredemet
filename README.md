@@ -25,8 +25,42 @@ Para a obtenção de cada produto há uma sintase própria de solicitação que 
 
 ## Mode de utilização:
 
-`import pyredemet`
+    import pyredemet
  
-`redemet = pyredemet(api="SUA_API_KEY")`
+    api_key = 'SUA_API_KEY'
+    redemet = pyredemet(api_key)
 
-`response = redemet.get_aerodromos(pais=Brasil)`
+    ## Aerodromos
+    result = redemet.get_aerodromos(pais='Brasil')
+
+    result = redemet.get_aerodromos_status(pais='Brasil')
+
+    result = redemet.get_aerodromos_info(localidade='SBBR', metar='sim', taf='sim')
+
+    ## Produtos
+    result = redemet.get_produtos_amdar(data='2020032415')
+
+    result = redemet.get_produtos_modelo(modelo='wifs',area='b1',produto='vento-altitude-barb',nivel='600',anima=2)
+
+    result = redemet.get_produto_radar(tipo='maxcappi',area='tm',data='2020032410',anima=2)
+
+    result = redemet.get_produto_satelite(tipo='vis', data='2020032410', anima=2)
+
+    result = redemet.get_produto_stsc(data='2020032410', anima=2)
+
+    ## Mensagens
+    result = redemet.get_mensagens_aviso(localidades='SBBR,SBPA', data_ini='2020030912', data_fim='2020030912')
+
+    result = redemet.get_mensagens_gamet(pais='Brasil', data_ini='202006120300',data_fim='202006120300')
+
+    result = redemet.get_mensagens_metar(localidades='SBBR,SBPA', data_ini='2020030912',data_fim='2020030912')
+
+    result = redemet.get_mensagens_meteograma(localidade='SBBR', data_hora='2020030912', horas=12)
+
+    result = redemet.get_mensagens_pilot(estacao=83378,data_ini='2020030912',data_fim='2020030912')
+
+    result = redemet.get_mensagens_sigmet(pais='Brasil', data_ini='202007071200',data_fim='202007071800')
+
+    result = redemet.get_mensagens_taf(localidades='SBBR,SBPA', data_ini='2020030912',data_fim='2020030912', page_tam=100, fim_linha='texto')
+
+    result = redemet.get_mensagens_temp(estacao=83378,data_ini='2020030912',data_fim='2020030912')
