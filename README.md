@@ -23,7 +23,7 @@ Para a obtenção de cada produto há uma sintase própria de solicitação que 
 * Mensagem TAF - `get_mensagens_taf(api_key, localidades, data_ini, data_fim, page_tam, fim_linha)`
 * Mensagem TEMP - `get_mensagens_temp(api_key, estacao, data_ini, data_fim, page_tam)`
 
-## Mode de utilização:
+## Modo de utilização:
 
     import pyredemet
  
